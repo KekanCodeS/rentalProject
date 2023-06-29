@@ -1,5 +1,3 @@
-//Привет из будущего
-
 package com.example.rentalproject.controller;
 
 import com.example.rentalproject.entity.User;
