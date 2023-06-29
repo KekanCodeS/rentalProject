@@ -76,6 +76,10 @@ public class PurchaseService {
         return 1L;
     }
 
+    public Optional<Purchase> getById(Long id){
+        return purchasesRepo.findById(id);
+    }
+
     public Long setPledgeStatus(Long id, PledgeStatus pledgeStatus){
         Optional<Purchase> pch = purchasesRepo.findById(id);
         if(pch.isEmpty())

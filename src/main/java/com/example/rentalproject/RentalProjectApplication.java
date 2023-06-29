@@ -26,6 +26,7 @@ public class RentalProjectApplication {
         PurchaseService purs = ctx.getBean(PurchaseService.class);
         PurchasesRepo pr = ctx.getBean(PurchasesRepo.class);
 
+
 //        purs.addPurchase(1L, 1L, 1L);
 //        purs.setPledgeStatus(11L, PledgeStatus.PAID);
 //        purs.startRent(11L);
