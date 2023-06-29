@@ -19,7 +19,6 @@ public class TokenService {
 
     public Long validToken(String token){
         Token tkn = tokensRepo.findByToken(token);
-        //System.out.println(tkn);
         if (tkn != null){
             LocalDateTime curDate = LocalDateTime.now();
             if (curDate.isBefore(tkn.getDate()))

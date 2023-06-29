@@ -2,6 +2,7 @@ package com.example.rentalproject.service;
 
 import com.example.rentalproject.entity.Product;
 import com.example.rentalproject.entity.ProductAmount;
+import com.example.rentalproject.entity.Store;
 import com.example.rentalproject.repository.CategoryRepo;
 import com.example.rentalproject.repository.ProductsAmountRepo;
 import com.example.rentalproject.repository.ProductsRepo;
@@ -11,7 +12,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+
+//6UoPGESdi4jF59oi3rmo6BJESTvFahqP3IAuXw6WvnlJV3DTjjTQavDCrG8mQ13RoKul5byvllkkjsgg2MWVILaf89nn2AiJCMQmvv02tfHbaqJTdiF5lvgKCEWf16sgyYKQGydifSo0HzIyhwE756wQwMhwUs6sxev3YQ7eaPwHwFZDXfBB1R0BrXeH2DqRHQvF5vEiKcB9KYoO9SYlwVfmBCrbd90vVBJf43BWb1uKMuHrkE8Gq3mgOElotfk
 @Service
 public class ProductService {
     @Autowired
@@ -76,8 +81,13 @@ public class ProductService {
         return lst.stream().filter(x -> x.getCategory().getId().equals(id)).toList();
     }
 
-    public Product getProduct(Long id){
-        return productsRepo.findById(id).get();
+    public Optional<Product> getProduct(Long id){
+        return productsRepo.findById(id);
+    }
+
+    public List<Store> getSoresByProduct(Long id){
+        List<ProductAmount> lst = productsAmountRepo.findByProductId(id);
+        return lst.stream().filter(x -> x.getAmount() > 0).map(ProductAmount::getStore).collect(Collectors.toList());
     }
 
 }

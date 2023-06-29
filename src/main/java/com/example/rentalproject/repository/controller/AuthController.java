@@ -1,5 +1,8 @@
-package com.example.rentalproject.controller;
+package com.example.rentalproject.repository.controller;
 
+import com.example.rentalproject.entity.User;
+import com.example.rentalproject.pojo.AuthRequest;
+import com.example.rentalproject.pojo.RegiserRequest;
 import com.example.rentalproject.service.AuthService;
 import com.example.rentalproject.service.TokenService;
 import com.example.rentalproject.service.UserService;
@@ -24,9 +27,8 @@ public class AuthController {
 
 
     @PostMapping(path = "register")
-    public ResponseEntity<String> register(@RequestParam("login") String login, @RequestParam("password") String password,
-                                           @RequestParam("name") String name, @RequestParam("surname") String surname){
-        Long usr = userService.addUser(name, surname, login, password);
+    public ResponseEntity<String> register(@RequestBody RegiserRequest reg){
+        Long usr = userService.addUser(reg.getName(), reg.getSurname(), reg.getLogin(), reg.getPassword());
         if (usr == -1){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
@@ -35,8 +37,8 @@ public class AuthController {
 
 
     @PostMapping(path = "login")
-    public ResponseEntity<String> login(@RequestParam("login") String login, @RequestParam("password") String password){
-        Long usr = authService.login(login, password);
+    public ResponseEntity<String> login(@RequestBody AuthRequest auth){
+        Long usr = authService.login(auth.getLogin(),auth.getPassword());
         System.out.println(usr);
         if (usr == -1){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -59,12 +61,20 @@ public class AuthController {
     public ResponseEntity<String> validToken(@RequestParam("token") String token){
         Long usr = tokenService.validToken(token);
         if (usr == -1){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         tokenService.refresh(token);
-        JSONObject json = new JSONObject();
-        json.put("state", "ok");
-        return ResponseEntity.ok(json.toString());
+        return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping(path = "userByToken")
+    public ResponseEntity<User> getUserByToken(@RequestParam("token") String token){
+        Long usr = tokenService.validToken(token);
+        if (usr == -1){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok().body(userService.getById(usr).get());
     }
 
 }

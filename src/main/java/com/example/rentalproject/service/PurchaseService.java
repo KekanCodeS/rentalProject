@@ -3,11 +3,15 @@ package com.example.rentalproject.service;
 import com.example.rentalproject.entity.Product;
 import com.example.rentalproject.entity.Purchase;
 import com.example.rentalproject.entity.Store;
+import com.example.rentalproject.enums.PledgeStatus;
+import com.example.rentalproject.enums.PurchaseStatus;
 import com.example.rentalproject.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PurchaseService {
@@ -22,21 +26,55 @@ public class PurchaseService {
     @Autowired
     private ProductAmountService productAmountService;
 
+
     public List<Purchase> getAll(){
         return purchasesRepo.findAll();
     }
 
-    public int addPurchase(Long userId, Long productId, Long storeId){
+    public Long addPurchase(Long userId, Long productId, Long storeId){
         Purchase res = new Purchase();
+        if (productAmountService.getProductAmountByStore(productId, storeId) < 0
+                || usersRepo.findById(userId).isEmpty()
+                || storesRepo.findById(storeId).isEmpty()) return -1L;
+        res.setUser(usersRepo.findById(userId).get());
         Product prod = productsRepo.findById(productId).get();
         Store store = storesRepo.findById(storeId).get();
-        if (productAmountService.getProductAmountByStore(productId, storeId) < 0) return -1;
-        res.setUser(usersRepo.findById(userId).get());
         res.setProduct(prod);
         res.setStartPrice(prod.getPrice());
         res.setStartPledge(prod.getPledge());
+        res.setStore(store);
+        res.setStatus(PurchaseStatus.ORDERED);
         purchasesRepo.save(res);
-        return 1;
+        return 1L;
+    }
+
+    public Long setStatus(Long id, PurchaseStatus status){
+        Optional<Purchase> pch = purchasesRepo.findById(id);
+        if(pch.isEmpty())
+            return -1L;
+        Purchase purchase = pch.get();
+        purchase.setStatus(status);
+        purchasesRepo.save(purchase);
+        return 1L;
+    }
+
+    public Long setPledgeStatus(Long id, PledgeStatus pledgeStatus){
+        Optional<Purchase> pch = purchasesRepo.findById(id);
+        if(pch.isEmpty())
+            return -1L;
+        Purchase purchase = pch.get();
+        purchase.setPledgeStatus(pledgeStatus);
+        purchasesRepo.save(purchase);
+        return 1L;
+    }
+
+    public Long startRent(Long id){
+        Optional<Purchase> prs = purchasesRepo.findById(id);
+        if (prs.isEmpty()) return -1L;
+        Purchase purchase = prs.get();
+        purchase.setRentStart(LocalDate.now());
+        purchase.setStatus(PurchaseStatus.STARTED);
+        return 1L;
     }
 
 

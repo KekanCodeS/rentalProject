@@ -1,6 +1,7 @@
 package com.example.rentalproject.entity;
 
 import com.example.rentalproject.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,7 @@ public class User {
     private String name;
     private String surname;
     private String login;
+    @JsonIgnore
     private String password;
     private Role role = Role.COMMON;
 }

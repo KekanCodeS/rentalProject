@@ -1,5 +1,8 @@
 package com.example.rentalproject;
 
+import com.example.rentalproject.enums.PledgeStatus;
+import com.example.rentalproject.enums.PurchaseStatus;
+import com.example.rentalproject.repository.PurchasesRepo;
 import com.example.rentalproject.repository.TokensRepo;
 import com.example.rentalproject.repository.UsersRepo;
 import com.example.rentalproject.service.*;
@@ -20,10 +23,10 @@ public class RentalProjectApplication {
         TokensRepo tr = ctx.getBean(TokensRepo.class);
         AuthService as = ctx.getBean(AuthService.class);
         TokenService ts = ctx.getBean(TokenService.class);
+        PurchaseService purs = ctx.getBean(PurchaseService.class);
 
 
-        System.out.println(cs.getAll());
-
+        System.out.println(purs.getAll());
 
 
     }

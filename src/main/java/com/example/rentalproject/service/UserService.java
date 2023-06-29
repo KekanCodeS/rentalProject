@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -33,5 +34,9 @@ public class UserService {
         res.setRole(Role.COMMON);
         usersRepo.save(res);
         return usersRepo.findByLogin(login).getId();
+    }
+
+    public Optional<User> getById(Long id){
+        return usersRepo.findById(id);
     }
 }

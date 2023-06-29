@@ -1,5 +1,7 @@
 package com.example.rentalproject.entity;
 
+import com.example.rentalproject.enums.PledgeStatus;
+import com.example.rentalproject.enums.PurchaseStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +24,7 @@ public class Purchase {
     private User user;
     private LocalDate rentStart;
     private LocalDate rentEnd;
-    private String status;
+    private PurchaseStatus status;
     @ManyToOne
     @JoinColumn(name = "productId", referencedColumnName = "id")
     private Product product;
@@ -32,5 +34,5 @@ public class Purchase {
     private Float startPrice;
     private Float totalPrice;
     private Float startPledge;
-    private String pledgeStatus;
+    private PledgeStatus pledgeStatus;
 }
