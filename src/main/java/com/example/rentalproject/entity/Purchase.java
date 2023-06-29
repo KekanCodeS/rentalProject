@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -22,8 +23,8 @@ public class Purchase {
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
-    private LocalDate rentStart;
-    private LocalDate rentEnd;
+    private LocalDateTime rentStart;
+    private LocalDateTime rentEnd;
     private PurchaseStatus status;
     @ManyToOne
     @JoinColumn(name = "productId", referencedColumnName = "id")

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,11 +71,14 @@ public class PurchaseService {
 
     public Long startRent(Long id){
         Optional<Purchase> prs = purchasesRepo.findById(id);
-        if (prs.isEmpty()) return -1L;
-        Purchase purchase = prs.get();
-        purchase.setRentStart(LocalDate.now());
-        purchase.setStatus(PurchaseStatus.STARTED);
-        return 1L;
+        if (!prs.isEmpty() && prs.get().getPledgeStatus() == PledgeStatus.PAID){
+            Purchase purchase = prs.get();
+            purchase.setRentStart(LocalDateTime.now());
+            purchase.setStatus(PurchaseStatus.STARTED);
+            purchasesRepo.save(purchase);
+            return 1L;
+        }
+        return -1L;
     }
 
 

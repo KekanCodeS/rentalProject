@@ -24,9 +24,12 @@ public class RentalProjectApplication {
         AuthService as = ctx.getBean(AuthService.class);
         TokenService ts = ctx.getBean(TokenService.class);
         PurchaseService purs = ctx.getBean(PurchaseService.class);
+        PurchasesRepo pr = ctx.getBean(PurchasesRepo.class);
 
-
-        System.out.println(purs.getAll());
+        purs.addPurchase(1L, 1L, 1L);
+        purs.setPledgeStatus(7L, PledgeStatus.PAID);
+        purs.startRent(7L);
+        System.out.println(pr.findById(7L).get());
 
 
     }
