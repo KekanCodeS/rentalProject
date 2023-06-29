@@ -28,6 +28,8 @@ public class PurchaseService {
     private StoresRepo storesRepo;
     @Autowired
     private ProductAmountService productAmountService;
+    @Autowired
+    ProductsAmountRepo productsAmountRepo;
 
 
     public List<Purchase> getAll(){
@@ -51,6 +53,7 @@ public class PurchaseService {
         res.setStatus(PurchaseStatus.ORDERED);
         purchasesRepo.save(res);
         amount.setAmount(amount.getAmount()-1);
+        productsAmountRepo.save(amount);
         return 1L;
     }
 
@@ -97,13 +100,29 @@ public class PurchaseService {
 
     public Long stopRent(Long id){
         Optional<Purchase> prs = purchasesRepo.findById(id);
-        if (!prs.isEmpty() && prs.get().getStatus() == PurchaseStatus.STARTED){
+        if (prs.isPresent() && prs.get().getStatus() == PurchaseStatus.STARTED){
             Purchase purchase = prs.get();
             purchase.setRentEnd(LocalDateTime.now());
             purchase.setStatus(PurchaseStatus.STOPPED);
             purchase.setTotalPrice(purchase.getStartPrice() *
                     ((float)Duration.between(purchase.getRentStart(), purchase.getRentEnd())
                             .toMinutes())/60);
+            purchasesRepo.save(purchase);
+            return 1L;
+        }
+        return -1L;
+    }
+
+    public Long endRent(Long id){
+        Optional<Purchase> prs = purchasesRepo.findById(id);
+        if (prs.isPresent() && prs.get().getStatus() == PurchaseStatus.STOPPED){
+            Purchase purchase = prs.get();
+            ProductAmount amount = productAmountService.getProductAmountByProductAndStore(purchase.getProduct().getId(),
+                                                                                          purchase.getStore().getId());
+            amount.setAmount(amount.getAmount()+1);
+            productsAmountRepo.save(amount);
+            purchase.setPledgeStatus(PledgeStatus.RETURNED);
+            purchase.setStatus(PurchaseStatus.ENDED);
             purchasesRepo.save(purchase);
             return 1L;
         }

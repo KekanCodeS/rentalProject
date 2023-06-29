@@ -34,6 +34,7 @@ public class RentController {
         return ResponseEntity.ok().build();
     }
 
+
     @PostMapping(path = "startRent")
     public ResponseEntity<String> startRent(@RequestParam Long id,@RequestParam String token){
         Long usr = tokenService.validToken(token);
@@ -52,6 +53,16 @@ public class RentController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @PostMapping(path = "endRent")
+    public ResponseEntity<String> endRent(@RequestParam Long id, @RequestParam String token){
+        Long usr = tokenService.validToken(token);
+        if (usr != -1 && userService.isManager(usr) != -1){
+            purchaseService.endRent(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
 }
