@@ -1,4 +1,4 @@
-package com.example.rentalproject.repository.controller;
+package com.example.rentalproject.controller;
 
 import com.example.rentalproject.entity.Category;
 import com.example.rentalproject.entity.Product;

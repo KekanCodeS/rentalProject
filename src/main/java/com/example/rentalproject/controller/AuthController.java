@@ -1,4 +1,4 @@
-package com.example.rentalproject.repository.controller;
+package com.example.rentalproject.controller;
 
 import com.example.rentalproject.entity.User;
 import com.example.rentalproject.pojo.AuthRequest;
@@ -39,7 +39,6 @@ public class AuthController {
     @PostMapping(path = "login")
     public ResponseEntity<String> login(@RequestBody AuthRequest auth){
         Long usr = authService.login(auth.getLogin(),auth.getPassword());
-        System.out.println(usr);
         if (usr == -1){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
@@ -75,6 +74,15 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return ResponseEntity.ok().body(userService.getById(usr).get());
+    }
+
+    @GetMapping(path = "isManager")
+    public ResponseEntity<String> checkForManager(@RequestParam("token") String token){
+        Long usr = tokenService.validToken(token);
+        if (usr != -1 && userService.isManager(usr) != -1){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
 }

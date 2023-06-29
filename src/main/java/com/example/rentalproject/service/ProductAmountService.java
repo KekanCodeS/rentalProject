@@ -23,4 +23,7 @@ public class ProductAmountService {
         return  productsAmountRepo.findByProductIdAndStoreId(prodId, storeId).getAmount();
     };
 
+    public ProductAmount getProductAmountByProductAndStore(Long prod, Long store){
+        return productsAmountRepo.findByProductIdAndStoreId(prod, store);
+    };
 }

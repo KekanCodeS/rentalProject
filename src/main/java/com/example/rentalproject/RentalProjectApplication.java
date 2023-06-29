@@ -26,11 +26,11 @@ public class RentalProjectApplication {
         PurchaseService purs = ctx.getBean(PurchaseService.class);
         PurchasesRepo pr = ctx.getBean(PurchasesRepo.class);
 
-        purs.addPurchase(1L, 1L, 1L);
-        purs.setPledgeStatus(7L, PledgeStatus.PAID);
-        purs.startRent(7L);
-        System.out.println(pr.findById(7L).get());
-
+//        purs.addPurchase(1L, 1L, 1L);
+//        purs.setPledgeStatus(11L, PledgeStatus.PAID);
+//        purs.startRent(11L);
+//        purs.stopRent(11L);
+//        System.out.println(pr.findById(11L).get());
 
     }
 
