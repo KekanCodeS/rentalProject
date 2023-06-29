@@ -50,6 +50,7 @@ public class PurchaseService {
         res.setStartPrice(prod.getPrice());
         res.setStartPledge(prod.getPledge());
         res.setStore(store);
+        res.setPledgeStatus(PledgeStatus.WAITING);
         res.setStatus(PurchaseStatus.ORDERED);
         purchasesRepo.save(res);
         amount.setAmount(amount.getAmount()-1);
