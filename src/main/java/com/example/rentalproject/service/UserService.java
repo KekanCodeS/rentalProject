@@ -40,9 +40,5 @@ public class UserService {
         return usersRepo.findById(id);
     }
 
-    public Long isManager(Long id){
-        Optional<User> usr = usersRepo.findById(id);
-        if (usr.isPresent() && usr.get().getRole().equals(Role.MANAGER)) return 1L;
-        return -1L;
-    }
+
 }

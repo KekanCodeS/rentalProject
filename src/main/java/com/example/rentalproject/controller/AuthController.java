@@ -50,7 +50,6 @@ public class AuthController {
     public ResponseEntity<String> createToken(@RequestParam("userId")Long usr){
         String tkn = tokenService.createTokenForUser(usr);
         JSONObject json = new JSONObject();
-        json.put("state", "ok");
         json.put("token", tkn);
         return ResponseEntity.ok(json.toString());
     }
@@ -79,7 +78,16 @@ public class AuthController {
     @GetMapping(path = "isManager")
     public ResponseEntity<String> checkForManager(@RequestParam("token") String token){
         Long usr = tokenService.validToken(token);
-        if (usr != -1 && userService.isManager(usr) != -1){
+        if (usr != -1 && authService.isManager(usr) != -1){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @GetMapping(path = "isAdmin")
+    public ResponseEntity<String> checkForAdmin(@RequestParam("token") String token){
+        Long usr = tokenService.validToken(token);
+        if (usr != -1 && authService.isAdmin(usr) != -1){
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

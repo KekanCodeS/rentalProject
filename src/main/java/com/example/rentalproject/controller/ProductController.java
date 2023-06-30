@@ -3,8 +3,10 @@ package com.example.rentalproject.controller;
 import com.example.rentalproject.entity.Category;
 import com.example.rentalproject.entity.Product;
 import com.example.rentalproject.entity.Store;
+import com.example.rentalproject.service.AuthService;
 import com.example.rentalproject.service.CategoryService;
 import com.example.rentalproject.service.ProductService;
+import com.example.rentalproject.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,10 @@ public class ProductController {
     CategoryService categoryService;
     @Autowired
     ProductService productService;
+    @Autowired
+    TokenService tokenService;
+    @Autowired
+    AuthService authService;
 
 
     @GetMapping(path ="category")
@@ -47,8 +53,15 @@ public class ProductController {
         return ResponseEntity.ok().body(productService.getSoresByProduct(id));
     }
 
-//    @PostMapping
-//    public ResponseEntity<String> setPrice(@RequestParam Float price){
-//
-//    }
+    @PostMapping(path = "setPrice")
+    public ResponseEntity<String> setPrice(@RequestParam Long id, @RequestParam Float price, @RequestParam String token){
+        Long usr = tokenService.validToken(token);
+        if (usr != -1 && authService.isAdmin(usr) != -1){
+            if (productService.setPrice(id, price) != -1)
+                return ResponseEntity.ok().build();
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
 }

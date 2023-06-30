@@ -2,6 +2,7 @@ package com.example.rentalproject.controller;
 
 import com.example.rentalproject.entity.Purchase;
 import com.example.rentalproject.enums.PledgeStatus;
+import com.example.rentalproject.service.AuthService;
 import com.example.rentalproject.service.PurchaseService;
 import com.example.rentalproject.service.TokenService;
 import com.example.rentalproject.service.UserService;
@@ -23,6 +24,8 @@ public class RentController {
     UserService userService;
     @Autowired
     TokenService tokenService;
+    @Autowired
+    AuthService authService;
 
 
     @PostMapping(path = "create")
@@ -54,7 +57,7 @@ public class RentController {
     @PostMapping(path = "startRent")
     public ResponseEntity<String> startRent(@RequestParam Long id,@RequestParam String token){
         Long usr = tokenService.validToken(token);
-        if (usr != -1 && userService.isManager(usr) != -1){
+        if (usr != -1 && authService.isManager(usr) != -1){
             purchaseService.startRent(id);
             return ResponseEntity.ok().build();
         }
@@ -64,7 +67,7 @@ public class RentController {
     @PostMapping(path = "stopRent")
     public ResponseEntity<String> stopRent(@RequestParam Long id,@RequestParam String token){
         Long usr = tokenService.validToken(token);
-        if (usr != -1 && userService.isManager(usr) != -1){
+        if (usr != -1 && authService.isManager(usr) != -1){
             purchaseService.stopRent(id);
             return ResponseEntity.ok().build();
         }
@@ -74,7 +77,7 @@ public class RentController {
     @PostMapping(path = "endRent")
     public ResponseEntity<String> endRent(@RequestParam Long id, @RequestParam String token){
         Long usr = tokenService.validToken(token);
-        if (usr != -1 && userService.isManager(usr) != -1){
+        if (usr != -1 && authService.isManager(usr) != -1){
             purchaseService.endRent(id);
             return ResponseEntity.ok().build();
         }

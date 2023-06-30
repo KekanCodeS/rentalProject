@@ -90,7 +90,14 @@ public class ProductService {
         return lst.stream().filter(x -> x.getAmount() > 0).map(ProductAmount::getStore).collect(Collectors.toList());
     }
 
-//    public Long setPrice(Long id, Float price){
-//
-//    }
+    public Long setPrice(Long id, Float price){
+        Optional<Product> pr = productsRepo.findById(id);
+        if (pr.isPresent()){
+            Product product =  pr.get();
+            product.setPrice(price);
+            productsRepo.save(product);
+            return 1L;
+        }
+        return -1L;
+    }
 }
