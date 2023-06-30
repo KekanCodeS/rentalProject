@@ -44,6 +44,7 @@ public class RentController {
             Purchase purchase = prc.get();
             if (purchase.getUser().getId().equals(usr))
                 purchaseService.setPledgeStatus(id, PledgeStatus.PAID);
+            return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }

@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 
-//6UoPGESdi4jF59oi3rmo6BJESTvFahqP3IAuXw6WvnlJV3DTjjTQavDCrG8mQ13RoKul5byvllkkjsgg2MWVILaf89nn2AiJCMQmvv02tfHbaqJTdiF5lvgKCEWf16sgyYKQGydifSo0HzIyhwE756wQwMhwUs6sxev3YQ7eaPwHwFZDXfBB1R0BrXeH2DqRHQvF5vEiKcB9KYoO9SYlwVfmBCrbd90vVBJf43BWb1uKMuHrkE8Gq3mgOElotfk
+
 @Service
 public class ProductService {
     @Autowired
@@ -90,4 +90,7 @@ public class ProductService {
         return lst.stream().filter(x -> x.getAmount() > 0).map(ProductAmount::getStore).collect(Collectors.toList());
     }
 
+//    public Long setPrice(Long id, Float price){
+//
+//    }
 }

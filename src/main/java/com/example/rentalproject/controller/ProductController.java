@@ -47,4 +47,8 @@ public class ProductController {
         return ResponseEntity.ok().body(productService.getSoresByProduct(id));
     }
 
+//    @PostMapping
+//    public ResponseEntity<String> setPrice(@RequestParam Float price){
+//
+//    }
 }
