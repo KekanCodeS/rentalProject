@@ -42,9 +42,10 @@ public class RentController {
         Optional<Purchase> prc = purchaseService.getById(id);
         if (usr != -1 && prc.isPresent()){
             Purchase purchase = prc.get();
-            if (purchase.getUser().getId().equals(usr))
+            if (purchase.getUser().getId().equals(usr)){
                 purchaseService.setPledgeStatus(id, PledgeStatus.PAID);
-            return ResponseEntity.ok().build();
+                return ResponseEntity.ok().build();
+            }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
